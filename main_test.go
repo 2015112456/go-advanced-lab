@@ -1,3 +1,5 @@
+// Roger Zheng
+// CMPS2242 Lab #2 - Advanced Go
 package main
 
 import (
@@ -260,6 +262,57 @@ func TestCompose(t *testing.T) {
 			got := composedFunc(tt.input)
 			if got != tt.want {
 				t.Errorf("Compose() got = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+// part 5
+func TestSwapValues(t *testing.T) {
+	tests := []struct {
+		name  string
+		a     int
+		b     int
+		wantA int
+		wantB int
+	}{
+		{name: "swap positive values", a: 8, b: 10, wantA: 10, wantB: 8},
+		{name: "swap negative values", a: -1, b: -5, wantA: -5, wantB: -1},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			gotA, gotB := SwapValues(tt.a, tt.b)
+			if gotA != tt.wantA {
+				t.Errorf("SwapValues() gotA = %v, wantA = %v", gotA, tt.wantA)
+			}
+			if gotB != tt.wantB {
+				t.Errorf("SwapValues() gotB = %v, wantB = %v", gotB, tt.wantB)
+			}
+		})
+	}
+}
+
+func TestSwapPointers(t *testing.T) {
+	tests := []struct {
+		name  string
+		a     int
+		b     int
+		wantA int
+		wantB int
+	}{
+		{name: "swap positive values", a: 8, b: 10, wantA: 10, wantB: 8},
+		{name: "swap negative values", a: -1, b: -5, wantA: -5, wantB: -1},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			gotA := &tt.a
+			gotB := &tt.b
+			SwapPointers(gotA, gotB)
+			if *gotA != tt.wantA {
+				t.Errorf("SwapPointers() gotA = %v, wantA = %v", *gotA, tt.wantA)
+			}
+			if *gotB != tt.wantB {
+				t.Errorf("SwapPointers() gotB = %v, wantB = %v", *gotB, tt.wantB)
 			}
 		})
 	}

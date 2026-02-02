@@ -1,3 +1,5 @@
+// Roger Zheng
+// CMPS2242 Lab #2 - Advanced Go
 package main
 
 import (
@@ -121,6 +123,39 @@ func ExploreProcess() {
 //The difference between the slice header address and the element address is that the slice header points to the memory location of the slice pointer
 //while the element address points to the actual data stored in the slice.
 
+// part 5
+func DoubleValue(x int) { //Question: Will this modify the original variable? Why or why not?
+	x = x * 2 //Answer: No, this will not modify the original variable because Go uses pass-by-value for function arguments.
+}
+
+func DoublePointer(x *int) { //Question: Will this modify the original variable? Why or why not?
+	*x = *x * 2 //Answer: Yes, this will modify the original variable because we are passing a pointer to the variable which allows us to change its value directly.
+}
+
+func CreateOnStack() int {
+	stackX := 123
+	return stackX //This variable stays on the stack
+}
+
+func CreateOnHeap() *int {
+	heapX := 456
+	return &heapX //This variable escapes to the heap
+}
+
+func SwapValues(a, b int) (int, int) {
+	return b, a
+}
+
+func SwapPointers(a, b *int) {
+	*a, *b = *b, *a
+}
+
+func AnalyzeEscape() {
+	CreateOnStack() //CreateOnStack() variable stays on the stack
+	CreateOnHeap()  //CreateOnHeap() variable escapes to the heap
+} //heapX variable escapes to the heap to the heap because a reference to it's value was returned
+//"Escapes to heap" means that the variable lifetime exceeds beyond the function it was created in thereby requiring heap allocation
+
 func main() {
 	// part 1
 	fmt.Println("Part 1: ")
@@ -171,4 +206,14 @@ func main() {
 	// part 4
 	fmt.Println("\nPart 4: ")
 	ExploreProcess()
+
+	//part 5
+	fmt.Println("\nPart 5: ")
+	a, b := 5, 10
+	fmt.Printf("Before SwapValues: a = %d, b = %d\n", a, b)
+	a, b = SwapValues(a, b)
+	fmt.Printf("After SwapValues: a = %d, b = %d\n", a, b)
+	SwapPointers(&a, &b)
+	fmt.Printf("After SwapPointers: a = %d, b = %d\n", a, b)
+	AnalyzeEscape()
 }
