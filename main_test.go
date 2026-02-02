@@ -3,6 +3,7 @@
 package main
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -179,6 +180,7 @@ func TestApply(t *testing.T) {
 				if got[i] != tt.want[i] {
 					t.Errorf("Apply() got[%v] = %v, want[%v] = %v", i, got[i], i, tt.want[i])
 				}
+				fmt.Printf("Apply() test got = %v, want = %v\n", got[i], tt.want[i]) //to show closure independence
 			}
 		})
 	}

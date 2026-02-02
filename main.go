@@ -157,63 +157,58 @@ func AnalyzeEscape() {
 //"Escapes to heap" means that the variable lifetime exceeds beyond the function it was created in thereby requiring heap allocation
 
 func main() {
-	// part 1
-	fmt.Println("Part 1: ")
-	fmt.Println(Factorial(5))
-	fmt.Println(IsPrime(7))
-	fmt.Println(Power(2, 3))
-
-	// part 2
-	fmt.Println("\nPart 2: ")
-	counter1 := MakeCounter(0)
-	fmt.Println(counter1()) //1
-	fmt.Println(counter1()) //2
-
-	counter2 := MakeCounter(10)
-	fmt.Println(counter2()) //11
-	fmt.Println(counter1()) //3 (independent from counter2)
-
-	double := MakeMultiplier(2)
-	triple := MakeMultiplier(3)
-	fmt.Println(double(5)) //10
-	fmt.Println(triple(5)) //15
-
-	add, sub, get := MakeAccumulator(100)
-	add(50)
-	fmt.Println(get()) //150
-	sub(30)
-	fmt.Println(get()) //120
-
-	// part 3
-	fmt.Println("\nPart 3: ")
-	nums1 := []int{1, 2, 3, 4}
-	squared := Apply(nums1, func(x int) int { return x * x })
-	fmt.Println(squared) // [1 4 9 16]
-
-	nums2 := []int{1, 2, 3, 4, 5, 6}
-	evens := Filter(nums2, func(x int) bool { return x%2 == 0 })
-	fmt.Println(evens) // [2 4 6]
-
-	sum := Reduce(nums1, 0, func(acc, curr int) int { return acc + curr })
-	fmt.Println(sum) // 10
-
-	addTwoFunc := func(x int) int { return x + 2 }
-	doubleFunc := func(x int) int { return x * 2 }
-	doubleThenAddTwo := Compose(addTwoFunc, doubleFunc)
-	result := doubleThenAddTwo(5) // (5 * 2) + 2 = 12
-	fmt.Println(result)
-
-	// part 4
-	fmt.Println("\nPart 4: ")
+	fmt.Println("=== Process Information ===")
 	ExploreProcess()
 
-	//part 5
-	fmt.Println("\nPart 5: ")
+	fmt.Println("\n\n=== Math Operations ===")
+	nums := []int{0, 5, 10}
+	for _, n := range nums {
+		result, _ := Factorial(n)
+		fmt.Printf("Factorial(%d): %d\n", n, result)
+	}
+	nums = []int{17, 20, 25}
+	for _, n := range nums {
+		result, _ := IsPrime(n)
+		fmt.Printf("IsPrime(%d): %v\n", n, result)
+	}
+	result, _ := Power(2, 8)
+	fmt.Printf("Power(2, 8): %d\n", result)
+	result, _ = Power(5, 3)
+	fmt.Printf("Power(5, 3): %d\n", result)
+
+	fmt.Println("\n\n=== Closure Demonstration ===")
+	counter1 := MakeCounter(0)
+	fmt.Printf("Counter1: %d\n", counter1()) //1
+	fmt.Printf("Counter1: %d\n", counter1()) //2
+	counter2 := MakeCounter(100)
+	fmt.Printf("Counter2: %d\n", counter2()) //101
+	fmt.Printf("Counter1: %d\n", counter1()) //3
+	fmt.Printf("Counter2: %d\n", counter2()) //102
+	doubler := MakeMultiplier(2)
+	tripler := MakeMultiplier(3)
+	fmt.Printf("doubler(5) = %d\n", doubler(5)) //10
+	fmt.Printf("tripler(5) = %d\n", tripler(5)) //15
+
+	fmt.Println("\n\n=== Higher-Order Functions ===")
+	intSlice := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+	fmt.Printf("Original: %v\n", intSlice) //[1 2 3 4 5 6 7 8 9 10]
+	squaredSlice := Apply(intSlice, func(x int) int { return x * x })
+	fmt.Printf("Squared: %v\n", squaredSlice) //[1 4 9 16 25 36 49 64 81 100]
+	evenSlice := Filter(intSlice, func(x int) bool { return x%2 == 0 })
+	fmt.Printf("Evens: %v\n", evenSlice) //[2 4 6 8 10]
+	sum := Reduce(intSlice, 0, func(acc, curr int) int { return acc + curr })
+	fmt.Printf("Sum: %d\n", sum) //55
+	addTwoFunc := func(x int) int { return x + 10 }
+	doubleFunc := func(x int) int { return x * 2 }
+	doubleThenAddTen := Compose(addTwoFunc, doubleFunc)
+	composeResult := doubleThenAddTen(12)
+	fmt.Printf("Compose(): doubleThenAddTen(12) = %d\n", composeResult) //34
+
+	fmt.Println("\n\n=== Pointer Demonstration ===")
 	a, b := 5, 10
 	fmt.Printf("Before SwapValues: a = %d, b = %d\n", a, b)
 	a, b = SwapValues(a, b)
 	fmt.Printf("After SwapValues: a = %d, b = %d\n", a, b)
 	SwapPointers(&a, &b)
 	fmt.Printf("After SwapPointers: a = %d, b = %d\n", a, b)
-	AnalyzeEscape()
 }
