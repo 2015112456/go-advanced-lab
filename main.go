@@ -71,11 +71,46 @@ func MakeAccumulator(initial int) (add func(int), subtract func(int), get func()
 	return add, subtract, get
 }
 
+// part 3
+func Apply(nums []int, operation func(int) int) []int {
+	result := make([]int, len(nums))
+	for i, num := range nums {
+		result[i] = operation(num)
+	}
+	return result
+}
+
+func Filter(nums []int, predicate func(int) bool) []int {
+	var result []int
+	for _, num := range nums {
+		if predicate(num) {
+			result = append(result, num)
+		}
+	}
+	return result
+}
+
+func Reduce(nums []int, initial int, operation func(accumulator int, current int) int) int {
+	acc := initial
+	for _, num := range nums {
+		acc = operation(acc, num)
+	}
+	return acc
+}
+
+func Compose(f func(int) int, g func(int) int) func(int) int {
+	return func(x int) int {
+		return f(g(x))
+	}
+}
+
 func main() {
+	// part 1
 	Factorial(5)
 	IsPrime(7)
 	Power(2, 3)
 
+	// part 2
 	counter1 := MakeCounter(0)
 	fmt.Println(counter1()) //1
 	fmt.Println(counter1()) //2
@@ -94,4 +129,22 @@ func main() {
 	fmt.Println(get()) //150
 	sub(30)
 	fmt.Println(get()) //120
+
+	// part 3
+	nums1 := []int{1, 2, 3, 4}
+	squared := Apply(nums1, func(x int) int { return x * x })
+	fmt.Println(squared) // [1 4 9 16]
+
+	nums2 := []int{1, 2, 3, 4, 5, 6}
+	evens := Filter(nums2, func(x int) bool { return x%2 == 0 })
+	fmt.Println(evens) // [2 4 6]
+
+	sum := Reduce(nums1, 0, func(acc, curr int) int { return acc + curr })
+	fmt.Println(sum) // 10
+
+	addTwoFunc := func(x int) int { return x + 2 }
+	doubleFunc := func(x int) int { return x * 2 }
+	doubleThenAddTwo := Compose(addTwoFunc, doubleFunc)
+	result := doubleThenAddTwo(5) // (5 * 2) + 2 = 12
+	fmt.Println(result)
 }
