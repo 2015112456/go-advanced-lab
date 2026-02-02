@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"math"
 )
 
@@ -41,8 +42,56 @@ func Power(base, exponent int) (int, error) {
 	return result, nil
 }
 
+// part 2
+func MakeCounter(start int) func() int {
+	count := start
+	return func() int {
+		count++
+		return count
+	}
+}
+
+func MakeMultiplier(factor int) func(int) int {
+	return func(x int) int {
+		return x * factor
+	}
+}
+
+func MakeAccumulator(initial int) (add func(int), subtract func(int), get func() int) {
+	total := initial
+	add = func(x int) {
+		total += x
+	}
+	subtract = func(x int) {
+		total -= x
+	}
+	get = func() int {
+		return total
+	}
+	return add, subtract, get
+}
+
 func main() {
 	Factorial(5)
 	IsPrime(7)
 	Power(2, 3)
+
+	counter1 := MakeCounter(0)
+	fmt.Println(counter1()) //1
+	fmt.Println(counter1()) //2
+
+	counter2 := MakeCounter(10)
+	fmt.Println(counter2()) //11
+	fmt.Println(counter1()) //3 (independent from counter2)
+
+	double := MakeMultiplier(2)
+	triple := MakeMultiplier(3)
+	fmt.Println(double(5)) //10
+	fmt.Println(triple(5)) //15
+
+	add, sub, get := MakeAccumulator(100)
+	add(50)
+	fmt.Println(get()) //150
+	sub(30)
+	fmt.Println(get()) //120
 }
