@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"math"
+	"os"
 )
 
 // part 1
@@ -104,13 +105,31 @@ func Compose(f func(int) int, g func(int) int) func(int) int {
 	}
 }
 
+// part 4
+func ExploreProcess() {
+	fmt.Printf("Current Process ID: %d\n", os.Getpid())
+	fmt.Printf("Parent Process ID: %d\n", os.Getppid())
+	data := []int{1, 2, 3, 4, 5}
+	fmt.Printf("Memory address of slice: %p\n", &data)
+	fmt.Printf("Memory address of first element: %p\n", &data[0])
+	fmt.Println("Other processes cannot access these memory addresses directly due to process isolation.")
+}
+
+//A process ID is a unique identifier assigned to each running program by the OS to track and manage all running programs.
+//Process isolation is important because it prevents one process from interfering with another resulting in enhanced security and stability.
+//Without process isolation, if one process crashes, all other running processes could crash as well.
+//The difference between the slice header address and the element address is that the slice header points to the memory location of the slice pointer
+//while the element address points to the actual data stored in the slice.
+
 func main() {
 	// part 1
-	Factorial(5)
-	IsPrime(7)
-	Power(2, 3)
+	fmt.Println("Part 1: ")
+	fmt.Println(Factorial(5))
+	fmt.Println(IsPrime(7))
+	fmt.Println(Power(2, 3))
 
 	// part 2
+	fmt.Println("\nPart 2: ")
 	counter1 := MakeCounter(0)
 	fmt.Println(counter1()) //1
 	fmt.Println(counter1()) //2
@@ -131,6 +150,7 @@ func main() {
 	fmt.Println(get()) //120
 
 	// part 3
+	fmt.Println("\nPart 3: ")
 	nums1 := []int{1, 2, 3, 4}
 	squared := Apply(nums1, func(x int) int { return x * x })
 	fmt.Println(squared) // [1 4 9 16]
@@ -147,4 +167,8 @@ func main() {
 	doubleThenAddTwo := Compose(addTwoFunc, doubleFunc)
 	result := doubleThenAddTwo(5) // (5 * 2) + 2 = 12
 	fmt.Println(result)
+
+	// part 4
+	fmt.Println("\nPart 4: ")
+	ExploreProcess()
 }
